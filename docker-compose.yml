@@ -1,0 +1,137 @@
+version: "3.8"
+
+services:
+  config-service:
+    image: config-service:latest
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/config-service
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    networks:
+      - mynetwork
+
+  auth-service:
+    image: auth-service:latest
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/auth-service
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    networks:
+      - mynetwork
+
+  monitoring:
+    image: monitoring:latest
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/monitoring
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    networks:
+      - mynetwork
+
+  logging:
+    image: logging:latest
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/logging
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    networks:
+      - mynetwork
+
+  service-discovery:
+    image: service-discovery:latest
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/service-discovery
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    networks:
+      - mynetwork
+
+  gateway:
+    image: gateway:latest
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/gateway
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    networks:
+      - mynetwork
+
+  blockchain:
+    image: blockchain:latest
+    ports:
+      - "3004:3004"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/blockchain
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    networks:
+      - mynetwork
+
+  wallet:
+    image: wallet:latest
+    ports:
+      - "3003:3003"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/wallet
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    networks:
+      - mynetwork
+
+  transaction:
+    image: transaction:latest
+    ports:
+      - "3002:3002"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/transaction
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    networks:
+      - mynetwork
+
+  order:
+    image: order:latest
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/order
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    networks:
+      - mynetwork
+
+  user:
+    image: user:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/user
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    networks:
+      - mynetwork
+
+  mongodb:
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+    networks:
+      - mynetwork
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - mynetwork
+
+  redis:
+    image: redis:6.0
+    ports:
+      - "6379:6379"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
